@@ -57,6 +57,7 @@ app.post('/signin',(req,res)=>{
 
 app.post('/register',(req,res)=>{
     const{email,name,password}=req.body;
+    //returning and insert are knex methods
  db('users').returning('*')
  .insert({
  email:email,
@@ -69,16 +70,15 @@ app.post('/register',(req,res)=>{
 
 app.get('/profile/:id',(req,res)=>{
     const {id} = req.params;
-    let found = false;
-    database.users.forEach(user =>{
-    if(user.id === id){
-        found = true;
-        return res.json(user);
-    }
-})
-    if(!found){
-    res.status(400).json('not found');
+db.select('*').from('users').where({id})
+.then(user =>{
+if(user.length){
+    res.json(user[0])
+}else{
+    res.status(400).json('Not found')
 }
+})
+.catch(err=>res.status(400).json('error'))
 })
 
 app.put('/image', (req,res)=>{
