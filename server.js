@@ -1,9 +1,12 @@
+//dependencies
 const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const knex = require('knex');
 const bcrypt = require('bcrypt');
 const saltRounds=10;
+
+//controllers
 
 const db = knex({
     client: 'pg',
@@ -13,10 +16,6 @@ const db = knex({
       password : 'jimmypost',
       database : 'smartbrain'
     }
-});
-
-db.select('*').from('users').then(data=>{
-    console.log(data);
 });
 
 const app = express();
@@ -46,7 +45,7 @@ const database = {
 }
 
 app.get('/',(req,res)=>{
-    res.send(database.users)
+    res.send(db.users)
 })
 
 app.post('/signin',(req,res)=>{
@@ -124,12 +123,3 @@ db('users').where('id','=',id)
 app.listen('3000', ()=>{
     console.log('app is running on port 3000');
 })
-
-
-/*
-route route --> res = this is working
-signin route --> POST = success/fail, request responds w success/fail
-register -->POST = user, request that responds w new user info
-/profile/:userId --> GET, request that will return user information
-/image --> PUT --> user, a variable that goes up by 1 whenever a user submits a photo
-*/
