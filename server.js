@@ -12,6 +12,7 @@ const signin = require('./controllers/signin');
 const profile = require('./controllers/profile');
 const image = require('./controllers/image');
 
+//database connection
 const db = knex({
     client: 'pg',
     connection: {
@@ -23,30 +24,8 @@ const db = knex({
 });
 
 const app = express();
-
 app.use(bodyParser.json());
 app.use(cors());
-
-const database = {
-    users:[
-        {
-            id:'123',
-            name:'John',
-            email:'john@gmail.com',
-            password:'cookies',
-            entries:0,
-            joined: new Date()
-        },
-        {
-            id:'124',
-            name:'Sally',
-            email:'sally@gmail.com',
-            password:'bananas',
-            entries:0,
-            joined: new Date()
-        }
-    ]
-}
 
 app.get('/',(req,res)=>{
     res.send(db.users)
@@ -56,7 +35,6 @@ app.get('/',(req,res)=>{
 app.post('/signin',(req,res)=>{signin.handleSignin(req,res,db,bcrypt)})
 app.post('/register',(req,res)=>{register.handleRegister(req,res,db,bcrypt)})
 app.get('/profile/:id',(req,res)=>{profile.handleProfileGet(req,res,db)})
-
 app.put('/image', (req,res)=>{image.handleImage(req,res,db)})
 
 app.listen('3000', ()=>{
