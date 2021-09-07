@@ -16,10 +16,11 @@ const image = require('./controllers/image');
 const db = knex({
     client: 'pg',
     connection: {
-      host : 'postgresql-infinite-19234',
-      user : 'postgres',
-      password : 'jimmypost',
-      database : 'smartbrain'
+      host : process.env.DATABASE_URL,
+      connectionString: process.env.DATABASE_URL,
+      ssl: {
+        rejectUnauthorized: false
+      }
     }
 });
 
@@ -28,7 +29,7 @@ app.use(bodyParser.json());
 app.use(cors());
 
 app.get('/',(req,res)=>{
-    res.send('it is working')
+    res.send(db.users)
 })
 
 //routes
