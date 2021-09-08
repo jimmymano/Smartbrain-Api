@@ -12,10 +12,9 @@ const signin = require('./controllers/signin');
 const profile = require('./controllers/profile');
 const image = require('./controllers/image');
 
-process.env.NODE_TLS_REJECT_UNAUTHORIZED = 0; 
+
 //database connection
 const db = knex({
-    mode:'no-cors',
     client: 'pg',
     connection: {
       connectionString: process.env.DATABASE_URL,
@@ -26,16 +25,20 @@ const db = knex({
 });
 
 const app = express();
+app.all('*', function(req, res, next) {
+    var origin = req.get('origin'); 
+    res.header('Access-Control-Allow-Origin', origin);
+    res.header("Access-Control-Allow-Headers", "X-Requested-With");
+    res.header('Access-Control-Allow-Headers', 'Content-Type');
+    next();
+});
+
 app.use(bodyParser.json());
 app.use(cors());
 
 app.get('/',(req,res)=>{
     res.send(db.users)
 })
-res.set({
-    "Content-Type": "application/json",
-    "Access-Control-Allow-Origin": "*",
-});
 
 //routes
 app.post('/signin',(req,res)=>{signin.handleSignin(req,res,db,bcrypt)})
