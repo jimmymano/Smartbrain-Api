@@ -25,13 +25,13 @@ const db = knex({
 });
 
 const app = express();
-app.all('*', function(req, res, next) {
-    var origin = req.get('origin'); 
-    res.header('Access-Control-Allow-Origin', origin);
-    res.header("Access-Control-Allow-Headers", "X-Requested-With");
-    res.header('Access-Control-Allow-Headers', 'Content-Type');
-    next();
-});
+// app.all('*', function(req, res, next) {
+//     var origin = req.get('origin'); 
+//     res.header('Access-Control-Allow-Origin', origin);
+//     res.header("Access-Control-Allow-Headers", "X-Requested-With");
+//     res.header('Access-Control-Allow-Headers', 'Content-Type');
+//     next();
+// });
 
 app.use(bodyParser.json());
 app.use(cors());
@@ -47,6 +47,6 @@ app.get('/profile/:id',(req,res)=>{profile.handleProfileGet(req,res,db)})
 app.put('/image', (req,res)=>{image.handleImage(req,res,db)})
 app.put('/imageurl', (req,res)=>{image.handleApiCall(req,res)})
 
-app.listen(process.env.PORT||'3000', ()=>{
+app.listen(process.env.PORT||3000, ()=>{
     console.log('app is running on port 3000');
 })
